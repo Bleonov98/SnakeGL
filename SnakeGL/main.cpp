@@ -3,13 +3,15 @@
 
 #include <iostream>
 
+#include "Game.h"
+
 // input
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
 // settings
-const unsigned int SCR_WIDTH = 1280;
-const unsigned int SCR_HEIGHT = 720;
+const unsigned int SCR_WIDTH = 1600;
+const unsigned int SCR_HEIGHT = 900;
 
 // timing
 float deltaTime = 0.0f;
@@ -19,7 +21,7 @@ float lastFrame = 0.0f;
 double lastX;
 
 // Program
-//Program clockProgram(SCR_WIDTH, SCR_HEIGHT);
+Game snakeGame(SCR_WIDTH, SCR_HEIGHT);
 
 int main() {
 
@@ -44,6 +46,8 @@ int main() {
 
     glEnable(GL_DEPTH_TEST);
 
+    snakeGame.Init();
+
     while (!glfwWindowShouldClose(window))
     {
         glClearColor(0.1f, 0.2f, 0.0f, 1.0f);
@@ -55,11 +59,11 @@ int main() {
         lastFrame = currentFrame;
 
         // updating
-        //clockProgram.ProcessInput(deltaTime);
-        //clockProgram.Update(deltaTime);
+        snakeGame.ProcessInput(deltaTime);
+        snakeGame.Update(deltaTime);
 
         //// render
-        //clockProgram.Render(deltaTime);
+        snakeGame.Render(deltaTime);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -83,9 +87,9 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         glfwSetWindowShouldClose(window, true);
     if (key >= 0 && key < 1024)
     {
-        /*if (action == GLFW_PRESS)
-            clockProgram.Keys[key] = true;
+        if (action == GLFW_PRESS)
+            snakeGame.keys[key] = true;
         else if (action == GLFW_RELEASE)
-            clockProgram.Keys[key] = false;*/
+            snakeGame.keys[key] = false;
     }
 }
