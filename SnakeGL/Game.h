@@ -1,6 +1,8 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include "GameObject.h"
+
 enum GameState {
 	MENU,
 	PAUSED,
@@ -20,7 +22,9 @@ public:
 
 	void ProcessInput(float dt);
 	void Update(float dt);
-	void Render(float dt);
+
+	void Render();
+	void DrawObject(GameObject* obj);
 
 	// smth
 
@@ -29,6 +33,9 @@ public:
 	bool keys[512];
 
 private:
+
+	Shader spriteShader;
+	glm::mat4 projection;
 
 	int width, height;
 	GameState gmState = MENU;

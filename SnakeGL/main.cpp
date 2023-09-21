@@ -1,3 +1,5 @@
+#define STB_IMAGE_IMPLEMENTATION
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -62,8 +64,8 @@ int main() {
         snakeGame.ProcessInput(deltaTime);
         snakeGame.Update(deltaTime);
 
-        //// render
-        snakeGame.Render(deltaTime);
+        // render
+        snakeGame.Render();
 
         glfwSwapBuffers(window);
         glfwPollEvents();
