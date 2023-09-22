@@ -29,12 +29,21 @@ void Renderer::InitRenderData()
 void Renderer::AddTexture(const char* fileName, bool alpha)
 {
     Texture texture;
-    texture.LoadTexture(fileName, alpha);
+    std::string filePath = "../textures/";
+    filePath += fileName;
+
+    texture.LoadTexture(filePath.c_str(), alpha);
     textures.push_back(texture);
 }
 
 void Renderer::Draw()
 {
+    for (int i = 0; i < textures.size(); i++)
+    {
+        glActiveTexture(GL_TEXTURE0 + i);
+        textures[i].Bind();
+    }
+
     glBindVertexArray(this->VAO);
     glDrawArrays(GL_TRIANGLES, 0, 6);
     glBindVertexArray(0);

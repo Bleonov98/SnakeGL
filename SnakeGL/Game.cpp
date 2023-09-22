@@ -1,6 +1,7 @@
 #include "Game.h"
 
-GameObject* object;
+std::unique_ptr<GameObject> background;
+std::unique_ptr<GameObject> field;
 
 void Game::Init()
 {
@@ -10,7 +11,11 @@ void Game::Init()
 	projection = glm::ortho(0.0f, static_cast<float>(this->width), static_cast<float>(this->height), 0.0f, -1.0f, 1.0f);
 
 	// init objects
-    object = new GameObject(glm::vec2(200.0f, 200.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(200.0f, 200.0f), 0.0f);
+    background = std::make_unique<GameObject>(glm::vec2(0.0f), glm::vec2(this->width, this->height));
+    background->SetTexture("cover.jpg", false);
+
+    field = std::make_unique<GameObject>(glm::vec2(50.0f), glm::vec2(1080.0f, 720.0f));
+    field->SetTexture("field.png", false);
 }
 
 void Game::ProcessInput(float dt)
@@ -23,10 +28,14 @@ void Game::Update(float dt)
 
 void Game::Render()
 {
-	DrawObject(object);
+    // main
+	DrawObject(background);
+    DrawObject(field);
+
+    // game objects
 }
 
-void Game::DrawObject(GameObject* obj)
+void Game::DrawObject(std::unique_ptr<GameObject>& obj)
 {
     spriteShader.Use();
     spriteShader.SetMatrix4("projection", projection);

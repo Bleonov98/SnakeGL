@@ -24,7 +24,7 @@ public:
 	void Update(float dt);
 
 	void Render();
-	void DrawObject(GameObject* obj);
+	void DrawObject(std::unique_ptr<GameObject>& obj);
 
 	// smth
 
