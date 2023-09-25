@@ -10,12 +10,14 @@ void Game::Init()
 	// tools
 	projection = glm::ortho(0.0f, static_cast<float>(this->width), static_cast<float>(this->height), 0.0f, -1.0f, 1.0f);
 
-	// init objects
+	// background/map
     background = std::make_unique<GameObject>(glm::vec2(0.0f), glm::vec2(this->width, this->height));
     background->SetTexture("cover.jpg", false);
 
     field = std::make_unique<GameObject>(glm::vec2(50.0f), glm::vec2(1080.0f, 720.0f));
-    field->SetTexture("field.png", false);
+    field->SetTexture("field.png", true);
+
+    // game objects
 }
 
 void Game::ProcessInput(float dt)
@@ -28,7 +30,7 @@ void Game::Update(float dt)
 
 void Game::Render()
 {
-    // main
+    // background/map
 	DrawObject(background);
     DrawObject(field);
 

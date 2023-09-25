@@ -10,6 +10,8 @@ void Texture::LoadTexture(const char* fileName, bool alpha)
 {
 	if (alpha)
 	{
+		this->alpha = true;
+
 		intFormat = GL_RGBA;
 		imgFormat = GL_RGBA;
 	}
