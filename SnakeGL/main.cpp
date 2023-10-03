@@ -88,8 +88,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     if (key >= 0 && key < 1024)
     {
         if (action == GLFW_PRESS)
-            snakeGame.keys[key] = true;
+            snakeGame.Keys[key] = true;
         else if (action == GLFW_RELEASE)
-            snakeGame.keys[key] = false;
+            snakeGame.Keys[key] = false;
     }
 }

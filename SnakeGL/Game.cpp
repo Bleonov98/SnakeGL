@@ -1,43 +1,53 @@
 #include "Game.h"
 
-std::unique_ptr<GameObject> background;
-std::unique_ptr<GameObject> field;
+GameObject* background;
+GameObject* field;
+
+Snake* snake;
 
 void Game::Init()
 {
     spriteShader.LoadShader("vShader.vx", "fShader.ft");
 
 	// tools
-	projection = glm::ortho(0.0f, static_cast<float>(this->width), static_cast<float>(this->height), 0.0f, -1.0f, 1.0f);
+    projection = glm::ortho(0.0f, static_cast<float>(this->width), static_cast<float>(this->height), 0.0f, -1.0f, 1.0f);
 
 	// background/map
-    background = std::make_unique<GameObject>(glm::vec2(0.0f), glm::vec2(this->width, this->height));
-    background->SetTexture("cover.jpg", false);
+    background = new GameObject(glm::vec2(0.0f), glm::vec2(this->width, this->height));
+    field = new GameObject(glm::vec2(50.0f), glm::vec2(1080, 720));
 
-    field = std::make_unique<GameObject>(glm::vec2(50.0f), glm::vec2(1080.0f, 720.0f));
+    background->SetTexture("cover.jpg", false);
     field->SetTexture("field.png", true);
 
     // game objects
+    snake = new Snake(glm::vec2(field->GetPos().x + fieldOffset.x, field->GetPos().y + fieldOffset.y), glm::vec2(60.0f), 100.0f, 0.0f, glm::vec3(0.5f, 1.0f, 0.75f));
+    snake->SetTexture("head.png", true);
 }
 
 void Game::ProcessInput(float dt)
 {
+    if (this->Keys[GLFW_KEY_LEFT]) snake->SetDirection(LEFT);
+    else if (this->Keys[GLFW_KEY_RIGHT]) snake->SetDirection(RIGHT);
+    else if (this->Keys[GLFW_KEY_UP]) snake->SetDirection(UP);
+    else if (this->Keys[GLFW_KEY_DOWN]) snake->SetDirection(DOWN);
 }
 
 void Game::Update(float dt)
 {
+    snake->Move(dt);
 }
 
 void Game::Render()
 {
     // background/map
-	DrawObject(background);
+    DrawObject(background);
     DrawObject(field);
 
     // game objects
+    DrawObject(snake);
 }
 
-void Game::DrawObject(std::unique_ptr<GameObject>& obj)
+void Game::DrawObject(GameObject* obj)
 {
     spriteShader.Use();
     spriteShader.SetMatrix4("projection", projection);
@@ -55,4 +65,12 @@ void Game::DrawObject(std::unique_ptr<GameObject>& obj)
     spriteShader.SetVector3f("spriteColor", obj->GetColor());
 
     obj->DrawObject();
+}
+
+Game::~Game()
+{
+    delete background;
+    delete field;
+
+    delete snake;
 }
