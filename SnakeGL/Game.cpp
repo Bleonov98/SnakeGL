@@ -3,7 +3,7 @@
 GameObject* background;
 GameObject* field;
 
-Snake* snake;
+Snake* head;
 
 void Game::Init()
 {
@@ -20,21 +20,33 @@ void Game::Init()
     field->SetTexture("field.png", true);
 
     // game objects
-    snake = new Snake(glm::vec2(field->GetPos().x + fieldOffset.x, field->GetPos().y + fieldOffset.y), glm::vec2(60.0f), 100.0f, 0.0f, glm::vec3(0.5f, 1.0f, 0.75f));
-    snake->SetTexture("head.png", true);
+    snake.reserve(40);
+    
+    head = new Snake(glm::vec2(field->GetPos().x + fieldOffset.x, field->GetPos().y + fieldOffset.y), glm::vec2(60.0f), 100.0f, 0.0f, glm::vec3(0.5f, 1.0f, 0.75f));
+    head->SetTexture("head.png", true);
+    snake.push_back(head);
 }
 
 void Game::ProcessInput(float dt)
 {
-    if (this->Keys[GLFW_KEY_LEFT]) snake->SetDirection(LEFT);
-    else if (this->Keys[GLFW_KEY_RIGHT]) snake->SetDirection(RIGHT);
-    else if (this->Keys[GLFW_KEY_UP]) snake->SetDirection(UP);
-    else if (this->Keys[GLFW_KEY_DOWN]) snake->SetDirection(DOWN);
+    if (this->Keys[GLFW_KEY_LEFT] && head->GetDirection() != RIGHT) head->SetDirection(LEFT);
+    else if (this->Keys[GLFW_KEY_RIGHT] && head->GetDirection() != LEFT) head->SetDirection(RIGHT);
+    else if (this->Keys[GLFW_KEY_UP] && head->GetDirection() != DOWN) head->SetDirection(UP);
+    else if (this->Keys[GLFW_KEY_DOWN] && head->GetDirection() != UP) head->SetDirection(DOWN);
 }
 
 void Game::Update(float dt)
 {
-    snake->Move(dt);
+    for (size_t i = 1; i < snake.size(); ++i)
+    {
+        snake[i]->SetPoint(snake[i - 1]->GetPos(), snake[i - 1]->GetDirection());
+    }
+
+    for (size_t i = 0; i < snake.size(); ++i)
+    {
+        if (i == 0) snake[i]->Move(dt);
+        else snake[i]->TailMove(dt);
+    }
 }
 
 void Game::Render()
@@ -44,7 +56,10 @@ void Game::Render()
     DrawObject(field);
 
     // game objects
-    DrawObject(snake);
+    for (auto i : snake)
+    {
+        DrawObject(i);
+    }
 }
 
 void Game::DrawObject(GameObject* obj)
@@ -67,10 +82,38 @@ void Game::DrawObject(GameObject* obj)
     obj->DrawObject();
 }
 
+void Game::AddSnakePart()
+{
+    Snake* body = nullptr;
+
+    if (snake.back()->GetDirection() == DOWN) body = new Snake(glm::vec2(snake.back()->GetPos().x, snake.back()->GetPos().y - 60.0f), glm::vec2(60.0f), 100.0f, 0.0f, glm::vec3(0.5f, 1.0f, 0.75f));
+    else if (snake.back()->GetDirection() == UP) body = new Snake(glm::vec2(snake.back()->GetPos().x, snake.back()->GetPos().y + 60.0f), glm::vec2(60.0f), 100.0f, 0.0f, glm::vec3(0.5f, 1.0f, 0.75f));
+    else if (snake.back()->GetDirection() == LEFT) body = new Snake(glm::vec2(snake.back()->GetPos().x + 60.0f, snake.back()->GetPos().y), glm::vec2(60.0f), 100.0f, 0.0f, glm::vec3(0.5f, 1.0f, 0.75f));
+    else if (snake.back()->GetDirection() == RIGHT) body = new Snake(glm::vec2(snake.back()->GetPos().x - 60.0f, snake.back()->GetPos().y), glm::vec2(60.0f), 100.0f, 0.0f, glm::vec3(0.5f, 1.0f, 0.75f));
+
+    if (body != nullptr) {
+        body->SetTexture("body.png", true);
+        snake.push_back(body);
+    }
+   
+}
+
 Game::~Game()
 {
     delete background;
     delete field;
 
-    delete snake;
+    // snake
+    delete head;
+
+    for (size_t i = 1; i < snake.size(); ++i)
+    {
+        delete snake[i];
+    }
+
+    snake.clear();
+    // -----
+
+
+
 }

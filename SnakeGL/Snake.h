@@ -3,12 +3,17 @@
 
 #include "GameObject.h"
 
+#include <list>
+#include <queue>
+
 enum MoveDirection {
 	UP,
 	DOWN,
 	LEFT,
 	RIGHT
 };
+
+typedef std::pair<glm::vec2, MoveDirection> pair_p;
 
 class Snake : public GameObject
 {
@@ -21,20 +26,22 @@ public:
 	// Set
 	void SetSpeed(float speed) { this->speed = speed; }
 	void SetDirection(MoveDirection mDir) { this->mDir = mDir; }
+	void SetPoint(glm::vec2 position, MoveDirection dir);
 
 	// Get
 	float GetSpeed() { return speed; }
+	MoveDirection GetDirection() { return mDir; }
 
-	// Main
 	void Move(float dt);
+	void TailMove(float dt);
 
-private:
+protected:
 
 	float speed;
-	int tailSize = 0;
+
+	std::queue<pair_p, std::list<pair_p>> point;
 
 	MoveDirection mDir = DOWN;
-
 };
 
 #endif // !SNAKE_H

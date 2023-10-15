@@ -30,7 +30,8 @@ public:
 	void Render();
 	void DrawObject(GameObject* obj);
 
-	// smth
+	// snake
+	void AddSnakePart();
 
 
 	// pub vars
@@ -44,6 +45,8 @@ private:
 	glm::mat4 projection;
 
 	glm::vec2 fieldOffset = glm::vec2(72.0f, 55.0f);
+
+	std::vector<Snake*> snake;
 
 	int width, height;
 	GameState gmState = MENU;
