@@ -25,6 +25,8 @@ void Game::Init()
     head = new Snake(glm::vec2(field->GetPos().x + fieldOffset.x, field->GetPos().y + fieldOffset.y), glm::vec2(60.0f), 100.0f, 0.0f, glm::vec3(0.5f, 1.0f, 0.75f));
     head->SetTexture("head.png", true);
     snake.push_back(head);
+
+    AddSnakePart();
 }
 
 void Game::ProcessInput(float dt)
@@ -95,7 +97,6 @@ void Game::AddSnakePart()
         body->SetTexture("body.png", true);
         snake.push_back(body);
     }
-   
 }
 
 Game::~Game()
