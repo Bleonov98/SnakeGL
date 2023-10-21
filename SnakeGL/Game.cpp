@@ -4,6 +4,7 @@ GameObject* background;
 GameObject* field;
 
 Snake* head;
+Apple* apple;
 
 void Game::Init()
 {
@@ -22,11 +23,14 @@ void Game::Init()
     // game objects
     snake.reserve(40);
     
-    head = new Snake(glm::vec2(field->GetPos().x + fieldOffset.x, field->GetPos().y + fieldOffset.y), glm::vec2(60.0f), 100.0f, 0.0f, glm::vec3(0.5f, 1.0f, 0.75f));
+    head = new Snake(glm::vec2(150.0f), glm::vec2(60.0f), 100.0f, 0.0f, glm::vec3(0.5f, 1.0f, 0.75f));
     head->SetTexture("head.png", true);
     snake.push_back(head);
+    objList.push_back(head);
 
-    AddSnakePart();
+    apple = new Apple(glm::vec2(150.0f), glm::vec2(30.0f));
+    apple->SetTexture("apple.png", true);
+    objList.push_back(apple);
 }
 
 void Game::ProcessInput(float dt)
@@ -39,16 +43,29 @@ void Game::ProcessInput(float dt)
 
 void Game::Update(float dt)
 {
+    // movement
     for (size_t i = 1; i < snake.size(); ++i)
     {
         snake[i]->SetPoint(snake[i - 1]->GetPos(), snake[i - 1]->GetDirection());
     }
-
+    
     for (size_t i = 0; i < snake.size(); ++i)
     {
         if (i == 0) snake[i]->Move(dt);
         else snake[i]->TailMove(dt);
     }
+    
+    // update borders after position changes
+    for (auto i : objList)
+    {
+        i->UpdateAABB();
+    }
+
+    if (head->CheckCollision(*apple)) {
+        head->AddScore();
+        AddSnakePart();
+        apple->ChangePos(snake);
+    } // snake and apple collision
 }
 
 void Game::Render()
@@ -62,6 +79,8 @@ void Game::Render()
     {
         DrawObject(i);
     }
+
+    DrawObject(apple);
 }
 
 void Game::DrawObject(GameObject* obj)
@@ -88,10 +107,10 @@ void Game::AddSnakePart()
 {
     Snake* body = nullptr;
 
-    if (snake.back()->GetDirection() == DOWN) body = new Snake(glm::vec2(snake.back()->GetPos().x, snake.back()->GetPos().y - 60.0f), glm::vec2(60.0f), 100.0f, 0.0f, glm::vec3(0.5f, 1.0f, 0.75f));
-    else if (snake.back()->GetDirection() == UP) body = new Snake(glm::vec2(snake.back()->GetPos().x, snake.back()->GetPos().y + 60.0f), glm::vec2(60.0f), 100.0f, 0.0f, glm::vec3(0.5f, 1.0f, 0.75f));
-    else if (snake.back()->GetDirection() == LEFT) body = new Snake(glm::vec2(snake.back()->GetPos().x + 60.0f, snake.back()->GetPos().y), glm::vec2(60.0f), 100.0f, 0.0f, glm::vec3(0.5f, 1.0f, 0.75f));
-    else if (snake.back()->GetDirection() == RIGHT) body = new Snake(glm::vec2(snake.back()->GetPos().x - 60.0f, snake.back()->GetPos().y), glm::vec2(60.0f), 100.0f, 0.0f, glm::vec3(0.5f, 1.0f, 0.75f));
+    if (snake.back()->GetDirection() == DOWN) body = new Snake(glm::vec2(snake.back()->GetPos().x, snake.back()->GetPos().y - 55.0f), glm::vec2(60.0f), 100.0f, 0.0f, glm::vec3(0.5f, 1.0f, 0.75f));
+    else if (snake.back()->GetDirection() == UP) body = new Snake(glm::vec2(snake.back()->GetPos().x, snake.back()->GetPos().y + 55.0f), glm::vec2(60.0f), 100.0f, 0.0f, glm::vec3(0.5f, 1.0f, 0.75f));
+    else if (snake.back()->GetDirection() == LEFT) body = new Snake(glm::vec2(snake.back()->GetPos().x + 55.0f, snake.back()->GetPos().y), glm::vec2(60.0f), 100.0f, 0.0f, glm::vec3(0.5f, 1.0f, 0.75f));
+    else if (snake.back()->GetDirection() == RIGHT) body = new Snake(glm::vec2(snake.back()->GetPos().x - 55.0f, snake.back()->GetPos().y), glm::vec2(60.0f), 100.0f, 0.0f, glm::vec3(0.5f, 1.0f, 0.75f));
 
     if (body != nullptr) {
         body->SetTexture("body.png", true);
@@ -105,8 +124,6 @@ Game::~Game()
     delete field;
 
     // snake
-    delete head;
-
     for (size_t i = 1; i < snake.size(); ++i)
     {
         delete snake[i];

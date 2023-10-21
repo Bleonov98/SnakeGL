@@ -6,6 +6,8 @@
 
 #include "GameObject.h"
 #include "Snake.h"
+#include "Apple.h"
+#include <thread>
 
 enum GameState {
 	MENU,
@@ -44,8 +46,7 @@ private:
 	Shader spriteShader;
 	glm::mat4 projection;
 
-	glm::vec2 fieldOffset = glm::vec2(72.0f, 55.0f);
-
+	std::vector<GameObject*> objList;
 	std::vector<Snake*> snake;
 
 	int width, height;

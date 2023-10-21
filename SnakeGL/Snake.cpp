@@ -27,14 +27,39 @@ void Snake::Move(float dt)
 
 void Snake::TailMove(float dt)
 {
-	if (!point.empty()) {
+	if (!point.empty() && selfMove) {
 		this->mDir = point.front().second;
 
-		if ((mDir == DOWN && position.y >= point.front().first.y) ||
-			(mDir == UP && position.y <= point.front().first.y) || 
-			(mDir == RIGHT && position.x >= point.front().first.x) ||
-			(mDir == LEFT && position.x <= point.front().first.x)) point.pop();
-
 		Move(dt);
+
+		if ((mDir == DOWN && position.y >= point.front().first.y) ||
+			(mDir == UP && position.y <= point.front().first.y) ||
+			(mDir == RIGHT && position.x >= point.front().first.x) ||
+			(mDir == LEFT && position.x <= point.front().first.x)) {
+
+			point.pop();
+			selfMove = false;
+		}
 	}
+	else if (!point.empty() && !selfMove) {
+		this->position = point.front().first;
+		point.pop();
+	}
+}
+
+void Snake::AddLife()
+{
+	if (score % 150 && life < 5) life++;
+}
+
+bool Snake::Death()
+{
+	if (life > 0) {
+		position = glm::vec2(150.0f);
+		mDir = DOWN;
+
+		life--;
+		return false;
+	}
+	else return true;
 }
