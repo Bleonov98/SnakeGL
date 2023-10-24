@@ -26,26 +26,13 @@ void Renderer::InitRenderData()
     glBindVertexArray(0);
 }
 
-void Renderer::AddTexture(const char* fileName, bool alpha)
-{
-    Texture texture;
-    std::string filePath = "../textures/";
-    filePath += fileName;
-
-    texture.LoadTexture(filePath.c_str(), alpha);
-    textures.push_back(texture);
-}
-
 void Renderer::Draw()
 {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    for (int i = 0; i < textures.size(); i++)
-    {
-        glActiveTexture(GL_TEXTURE0 + i);
-        textures[i].Bind();
-    }
+    glActiveTexture(GL_TEXTURE0);
+    texture.Bind();
 
     glBindVertexArray(this->VAO);
     glDrawArrays(GL_TRIANGLES, 0, 6);

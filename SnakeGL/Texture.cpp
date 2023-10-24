@@ -6,24 +6,6 @@ Texture::Texture()
 	glGenTextures(1, &this->ID);
 }
 
-void Texture::LoadTexture(const char* fileName, bool alpha)
-{
-	if (alpha)
-	{
-		this->alpha = true;
-
-		intFormat = GL_RGBA;
-		imgFormat = GL_RGBA;
-	}
-	// load image
-	int Width, Height, nrChannels;
-	unsigned char* data = stbi_load(fileName, &Width, &Height, &nrChannels, 0);
-
-	Generate(Width, Height, data);
-
-	stbi_image_free(data);
-}
-
 void Texture::Generate(unsigned int width, unsigned int height, unsigned char* data)
 {
 	this->width = width, this->height = height;

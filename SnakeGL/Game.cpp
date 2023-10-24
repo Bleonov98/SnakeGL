@@ -8,7 +8,14 @@ Apple* apple;
 
 void Game::Init()
 {
+    // resources
     spriteShader.LoadShader("vShader.vx", "fShader.ft");
+
+    ResourceManager::LoadTexture("cover.jpg", false, "cover");
+    ResourceManager::LoadTexture("field.png", true, "field");
+    ResourceManager::LoadTexture("head.png", true, "head");
+    ResourceManager::LoadTexture("body.png", true, "body");
+    ResourceManager::LoadTexture("apple.png", true, "apple");
 
 	// tools
     projection = glm::ortho(0.0f, static_cast<float>(this->width), static_cast<float>(this->height), 0.0f, -1.0f, 1.0f);
@@ -17,19 +24,19 @@ void Game::Init()
     background = new GameObject(glm::vec2(0.0f), glm::vec2(this->width, this->height));
     field = new GameObject(glm::vec2(50.0f), glm::vec2(1080, 720));
 
-    background->SetTexture("cover.jpg", false);
-    field->SetTexture("field.png", true);
+    background->SetTexture(ResourceManager::GetTexture("cover"));
+    field->SetTexture(ResourceManager::GetTexture("field"));
 
     // game objects
     snake.reserve(40);
     
     head = new Snake(glm::vec2(150.0f), glm::vec2(60.0f), 100.0f, 0.0f, glm::vec3(0.5f, 1.0f, 0.75f));
-    head->SetTexture("head.png", true);
+    head->SetTexture(ResourceManager::GetTexture("head"));
     snake.push_back(head);
     objList.push_back(head);
 
     apple = new Apple(glm::vec2(150.0f), glm::vec2(30.0f));
-    apple->SetTexture("apple.png", true);
+    apple->SetTexture(ResourceManager::GetTexture("apple"));
     objList.push_back(apple);
 }
 
@@ -62,9 +69,9 @@ void Game::Update(float dt)
     }
 
     if (head->CheckCollision(*apple)) {
+        apple->ChangePos(snake);
         head->AddScore();
         AddSnakePart();
-        apple->ChangePos(snake);
     } // snake and apple collision
 }
 
@@ -107,13 +114,13 @@ void Game::AddSnakePart()
 {
     Snake* body = nullptr;
 
-    if (snake.back()->GetDirection() == DOWN) body = new Snake(glm::vec2(snake.back()->GetPos().x, snake.back()->GetPos().y - 55.0f), glm::vec2(60.0f), 100.0f, 0.0f, glm::vec3(0.5f, 1.0f, 0.75f));
-    else if (snake.back()->GetDirection() == UP) body = new Snake(glm::vec2(snake.back()->GetPos().x, snake.back()->GetPos().y + 55.0f), glm::vec2(60.0f), 100.0f, 0.0f, glm::vec3(0.5f, 1.0f, 0.75f));
-    else if (snake.back()->GetDirection() == LEFT) body = new Snake(glm::vec2(snake.back()->GetPos().x + 55.0f, snake.back()->GetPos().y), glm::vec2(60.0f), 100.0f, 0.0f, glm::vec3(0.5f, 1.0f, 0.75f));
-    else if (snake.back()->GetDirection() == RIGHT) body = new Snake(glm::vec2(snake.back()->GetPos().x - 55.0f, snake.back()->GetPos().y), glm::vec2(60.0f), 100.0f, 0.0f, glm::vec3(0.5f, 1.0f, 0.75f));
+    if (snake.back()->GetDirection() == DOWN) body = new Snake(glm::vec2(snake.back()->GetPos().x, snake.back()->GetPos().y - 40.0f), glm::vec2(60.0f), 100.0f, 0.0f, glm::vec3(0.5f, 1.0f, 0.75f));
+    else if (snake.back()->GetDirection() == UP) body = new Snake(glm::vec2(snake.back()->GetPos().x, snake.back()->GetPos().y + 40.0f), glm::vec2(60.0f), 100.0f, 0.0f, glm::vec3(0.5f, 1.0f, 0.75f));
+    else if (snake.back()->GetDirection() == LEFT) body = new Snake(glm::vec2(snake.back()->GetPos().x + 40.0f, snake.back()->GetPos().y), glm::vec2(60.0f), 100.0f, 0.0f, glm::vec3(0.5f, 1.0f, 0.75f));
+    else if (snake.back()->GetDirection() == RIGHT) body = new Snake(glm::vec2(snake.back()->GetPos().x - 40.0f, snake.back()->GetPos().y), glm::vec2(60.0f), 100.0f, 0.0f, glm::vec3(0.5f, 1.0f, 0.75f));
 
     if (body != nullptr) {
-        body->SetTexture("body.png", true);
+        body->SetTexture(ResourceManager::GetTexture("body"));
         snake.push_back(body);
     }
 }

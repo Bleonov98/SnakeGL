@@ -10,11 +10,14 @@ public:
 
     Texture();
 
-    void LoadTexture(const char* fileName, bool alpha);
     void Generate(unsigned int width, unsigned int height, unsigned char* data);
     void Bind() const;
 
+    //
     bool IsAlpha() { return alpha; }
+    void SetAlpha(bool alpha) { this->alpha = alpha; }
+    void SetFormatAlpha() { imgFormat = intFormat = GL_RGBA; }
+
 
 private:
 

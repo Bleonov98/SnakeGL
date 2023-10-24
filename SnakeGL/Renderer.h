@@ -13,7 +13,7 @@ public:
 	Renderer() { InitRenderData(); }
 
 	void InitRenderData();
-	void AddTexture(const char* fileName, bool alpha);
+	void AddTexture(Texture texture) { this->texture = texture; }
 	void Draw();
 
 	~Renderer();
@@ -22,7 +22,7 @@ private:
 	
 	unsigned int VAO, VBO;
 	
-	std::vector<Texture> textures;
+	Texture texture;
 
 };
 

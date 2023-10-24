@@ -4,6 +4,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include "ResourceManager.h"
 #include "GameObject.h"
 #include "Snake.h"
 #include "Apple.h"

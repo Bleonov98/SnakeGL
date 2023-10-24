@@ -20,7 +20,7 @@ public:
 	void SetColor(glm::vec3 color) { this->color = color; }
 	void SetAngle(float angle) { this->angle = angle; }
 
-	void SetTexture(const char* fileName, bool alpha) { mesh.AddTexture(fileName, alpha); }
+	void SetTexture(Texture texture) { mesh.AddTexture(texture); }
 	void UpdateAABB() { hBox.SetBorder(position, position + size); }
 
 	// Get

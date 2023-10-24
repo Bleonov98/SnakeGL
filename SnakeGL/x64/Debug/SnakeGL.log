@@ -1,2 +1,13 @@
-﻿  Game.cpp
+﻿  Apple.cpp
+C:\Users\Koslo\source\repos\SnakeGL\SnakeGL\Apple.cpp(6,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\Koslo\source\repos\SnakeGL\SnakeGL\Apple.cpp(10,20): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\Koslo\source\repos\SnakeGL\SnakeGL\Apple.cpp(11,20): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
   SnakeGL.vcxproj -> C:\Users\Koslo\source\repos\SnakeGL\x64\Debug\SnakeGL.exe
