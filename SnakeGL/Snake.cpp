@@ -5,6 +5,18 @@ void Snake::SetPoint(glm::vec2 position, MoveDirection dir)
 	point.push(std::make_pair(position, dir));
 }
 
+glm::vec2 Snake::GetNosePoint()
+{
+	glm::vec2 point = position;
+
+	if (mDir == DOWN) point += glm::vec2(size.x / 2.0f, size.y);
+	else if (mDir == UP) point.x += size.x / 2.0f;
+	else if (mDir == RIGHT) point += glm::vec2(size.x, size.y / 2.0f);
+	else if (mDir == RIGHT) point.y += size.y / 2.0f;
+
+	return point;
+}
+
 void Snake::Move(float dt)
 {
 	if (mDir == DOWN) {
@@ -45,21 +57,4 @@ void Snake::TailMove(float dt)
 		this->position = point.front().first;
 		point.pop();
 	}
-}
-
-void Snake::AddLife()
-{
-	if (score % 150 && life < 5) life++;
-}
-
-bool Snake::Death()
-{
-	if (life > 0) {
-		position = glm::vec2(150.0f);
-		mDir = DOWN;
-
-		life--;
-		return false;
-	}
-	else return true;
 }

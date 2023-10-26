@@ -7,22 +7,15 @@ void Apple::ChangePos(const std::vector<Snake*>& snake)
 
 	while (true)
 	{
-		position.x = 150 + rand() % 200;
-		position.y = 150 + rand() % 200;
+		position.x = 130 + rand() % 900;
+		position.y = 100 + rand() % 610;
 
 		UpdateAABB();
 
 		std::vector<bool> col;
-		for (auto i : snake)
+		for (auto &i : snake)
 		{
-			col.push_back(CheckCollision(*i));
-		}
-
-		if (std::any_of(begin(col), end(col), [](bool intersect) {
-			return intersect == true;
-			})) {
-			std::cout << "intersect" << std::endl;
-			std::cout << "At point: (" << position.x << ";" << position.y << ")" << std::endl;
+			col.push_back(CheckCollision(*i) || FieldCollision());
 		}
 
 		if (std::none_of(col.begin(), col.end(), [](bool intersect) {

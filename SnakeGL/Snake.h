@@ -29,22 +29,20 @@ public:
 	void SetPoint(glm::vec2 position, MoveDirection dir);
 
 	// Get
-	int GetLife() { return life; }
 	int GetScore() { return score; }
 	float GetSpeed() { return speed; }
 	MoveDirection GetDirection() { return mDir; }
+	glm::vec2 GetNosePoint();
 
 	void Move(float dt);
 	void TailMove(float dt);
 
-	void AddLife();
 	void AddScore() { score += 10; }
-	bool Death();
 
 protected:
 
 	float speed;
-	int life = 3, score = 0;
+	int score = 0;
 	bool selfMove = true, first = true;
 
 	std::queue<pair_p, std::list<pair_p>> point;

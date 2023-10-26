@@ -45,6 +45,9 @@
     <ClCompile Include="ResourceManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TextRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -74,9 +77,18 @@
     <ClInclude Include="ResourceManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TextRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="vShader.vx" />
     <None Include="fShader.ft" />
+    <None Include="vTxtShader.vx">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="fTxtShader.ft">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

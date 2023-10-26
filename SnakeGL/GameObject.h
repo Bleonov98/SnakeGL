@@ -32,7 +32,9 @@ public:
 	// main
 	void DrawObject() { mesh.Draw(); }
 
+	bool PointCollision(const glm::vec2 point) { return hBox.IntersectPoint(point); }
 	bool CheckCollision(const GameObject& other) { return hBox.Intersects(other.hBox); }
+	bool FieldCollision() { return hBox.IntersectField(); }
 
 protected:
 
