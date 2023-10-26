@@ -11,6 +11,15 @@ public:
                 min.y <= other.max.y && max.y >= other.min.y); 
     }
 
+    bool IntersectField() const {
+        return (min.x <= 135.0f || min.y <= 105.0f || max.x >= 1050.0f || max.y >= 715.0f);
+    }
+
+    bool IntersectPoint(const glm::vec2 point) const {
+        return (min.x <= point.x && max.x >= point.x &&
+                min.y <= point.y && max.y >= point.y);
+    }
+
     void SetBorder(const glm::vec2& newMin, const glm::vec2& newMax) { 
         min = newMin; 
         max = newMax; 

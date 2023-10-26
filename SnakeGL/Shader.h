@@ -21,6 +21,7 @@ public:
 
     void SetFloat(const char* name, float value, bool useShader = false);
     void SetInteger(const char* name, int value, bool useShader = false);
+    void SetBool(const char* name, bool value, bool useShader = false);
 
     void SetVector2f(const char* name, float x, float y, bool useShader = false);
     void SetVector2f(const char* name, const glm::vec2& value, bool useShader = false);
