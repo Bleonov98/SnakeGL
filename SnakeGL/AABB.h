@@ -12,7 +12,7 @@ public:
     }
 
     bool IntersectField() const {
-        return (min.x <= 135.0f || min.y <= 105.0f || max.x >= 1050.0f || max.y >= 715.0f);
+        return (min.x <= 125.0f || min.y <= 100.0f || max.x >= 1055.0f || max.y >= 720.0f);
     }
 
     bool IntersectPoint(const glm::vec2 point) const {

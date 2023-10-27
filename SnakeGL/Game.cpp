@@ -1,6 +1,11 @@
 #include "Game.h"
 
+#include <irrklang/irrKlang.h>
+using namespace irrklang;
+
 TextRenderer* txt;
+
+ISoundEngine* snd = irrklang::createIrrKlangDevice();
 
 GameObject* background;
 GameObject* field;
@@ -19,6 +24,10 @@ void Game::Init()
         ResourceManager::LoadTexture("head.png", true, "head");
         ResourceManager::LoadTexture("body.png", true, "body");
         ResourceManager::LoadTexture("apple.png", true, "apple");
+        
+        ISoundSource* music = snd->addSoundSourceFromFile("../sounds/snake.mp3");
+        music->setDefaultVolume(0.2f);
+        snd->play2D(music);
     }
 
 	// tools
@@ -37,7 +46,7 @@ void Game::Init()
     // game objects
     snake.reserve(80);
     
-    head = new Snake(glm::vec2(150.0f), glm::vec2(30.0f), 100.0f, 0.0f, glm::vec3(0.5f, 1.0f, 0.75f));
+    head = new Snake(glm::vec2(150.0f), glm::vec2(30.0f), 250.0f, 0.0f, glm::vec3(0.5f, 1.0f, 0.75f));
     head->SetTexture(ResourceManager::GetTexture("head"));
     snake.push_back(head);
     objList.push_back(head);
@@ -134,14 +143,17 @@ void Game::Update(float dt)
             apple->ChangePos(snake);
             head->AddScore();
             AddSnakePart();
+            snd->play2D("../sounds/apple.wav");
         } // snake and apple collision
         if (head->FieldCollision()) {
             endGame = true;
             gmState = MENU;
+            snd->play2D("../sounds/crash.mp3");
         }
         if (TailCollision()) {
             endGame = true;
             gmState = MENU;
+            snd->play2D("../sounds/crash.mp3");
         }
     }
 }
@@ -232,10 +244,10 @@ void Game::AddSnakePart()
 {
     Snake* body = nullptr;
 
-    if (snake.back()->GetDirection() == DOWN) body = new Snake(glm::vec2(snake.back()->GetPos().x, snake.back()->GetPos().y - 20.0f), glm::vec2(30.0f), 100.0f, 0.0f, glm::vec3(0.5f, 1.0f, 0.75f));
-    else if (snake.back()->GetDirection() == UP) body = new Snake(glm::vec2(snake.back()->GetPos().x, snake.back()->GetPos().y + 20.0f), glm::vec2(30.0f), 100.0f, 0.0f, glm::vec3(0.5f, 1.0f, 0.75f));
-    else if (snake.back()->GetDirection() == LEFT) body = new Snake(glm::vec2(snake.back()->GetPos().x + 20.0f, snake.back()->GetPos().y), glm::vec2(30.0f), 100.0f, 0.0f, glm::vec3(0.5f, 1.0f, 0.75f));
-    else if (snake.back()->GetDirection() == RIGHT) body = new Snake(glm::vec2(snake.back()->GetPos().x - 20.0f, snake.back()->GetPos().y), glm::vec2(30.0f), 100.0f, 0.0f, glm::vec3(0.5f, 1.0f, 0.75f));
+    if (snake.back()->GetDirection() == DOWN) body = new Snake(glm::vec2(snake.back()->GetPos().x, snake.back()->GetPos().y - 10.0f), glm::vec2(30.0f), 100.0f, 0.0f, glm::vec3(0.5f, 1.0f, 0.75f));
+    else if (snake.back()->GetDirection() == UP) body = new Snake(glm::vec2(snake.back()->GetPos().x, snake.back()->GetPos().y + 10.0f), glm::vec2(30.0f), 100.0f, 0.0f, glm::vec3(0.5f, 1.0f, 0.75f));
+    else if (snake.back()->GetDirection() == LEFT) body = new Snake(glm::vec2(snake.back()->GetPos().x + 10.0f, snake.back()->GetPos().y), glm::vec2(30.0f), 100.0f, 0.0f, glm::vec3(0.5f, 1.0f, 0.75f));
+    else if (snake.back()->GetDirection() == RIGHT) body = new Snake(glm::vec2(snake.back()->GetPos().x - 10.0f, snake.back()->GetPos().y), glm::vec2(30.0f), 100.0f, 0.0f, glm::vec3(0.5f, 1.0f, 0.75f));
 
     if (body != nullptr) {
         body->SetTexture(ResourceManager::GetTexture("body"));
