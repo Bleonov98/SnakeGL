@@ -284,6 +284,8 @@ Game::~Game()
 {
     delete background;
     delete field;
+
+    delete snd;
     delete txt;
     
     delete head;
