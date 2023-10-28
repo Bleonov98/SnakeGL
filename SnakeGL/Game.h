@@ -14,7 +14,8 @@
 
 enum GameState {
 	MENU,
-	ACTIVE
+	ACTIVE,
+	PAUSED
 };
 
 class Game

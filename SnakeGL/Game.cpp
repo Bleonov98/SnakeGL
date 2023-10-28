@@ -27,7 +27,7 @@ void Game::Init()
         
         ISoundSource* music = snd->addSoundSourceFromFile("../sounds/snake.mp3");
         music->setDefaultVolume(0.2f);
-        snd->play2D(music);
+        snd->play2D(music, true);
     }
 
 	// tools
@@ -51,7 +51,7 @@ void Game::Init()
     snake.push_back(head);
     objList.push_back(head);
 
-    apple = new Apple(glm::vec2(150.0f), glm::vec2(20.0f));
+    apple = new Apple(glm::vec2(150.0f), glm::vec2(30.0f));
     apple->SetTexture(ResourceManager::GetTexture("apple"));
     objList.push_back(apple);
 }
@@ -86,7 +86,7 @@ void Game::ProcessInput(float dt)
         else if (this->Keys[GLFW_KEY_RIGHT] && head->GetDirection() != LEFT) head->SetDirection(RIGHT);
         else if (this->Keys[GLFW_KEY_UP] && head->GetDirection() != DOWN) head->SetDirection(UP);
         else if (this->Keys[GLFW_KEY_DOWN] && head->GetDirection() != UP) head->SetDirection(DOWN);
-        else if (this->Keys[GLFW_KEY_P]) gmState = MENU;
+        else if (this->Keys[GLFW_KEY_SPACE]) gmState = PAUSED;
     }
     else {
         if (this->Keys[GLFW_KEY_UP] && !this->KeysProcessed[GLFW_KEY_UP] && cursorPos.y > this->height / 2.0f) {
@@ -174,6 +174,17 @@ void Game::Render()
         }
 
         DrawObject(apple);
+    }
+    else if (gmState == PAUSED) {
+        // game objects
+        for (auto i : snake)
+        {
+            DrawObject(i);
+        }
+
+        DrawObject(apple);
+
+        Menu();
     }
     else {
         Menu();
